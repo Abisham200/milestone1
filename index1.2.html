@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Programs GridView</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: #f0f0f0;
+        }
+        .grid-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            padding: 20px;
+            max-width: 1200px;
+            width: 100%;
+        }
+        .grid-item {
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+            overflow: hidden;
+            text-align: center;
+            padding: 16px;
+        }
+        .grid-item img {
+            max-width: 100%;
+            height: auto;
+            border-bottom: 1px solid #ddd;
+        }
+        .grid-item h3 {
+            margin: 10px 0;
+        }
+        .grid-item p {
+            margin: 5px 0;
+            color: #555;
+        }
+    </style>
+</head>
+<body>
+
+<div class="grid-container" id="programsGrid">
+    <!-- Data will be inserted here by JavaScript -->
+</div>
+
+<script>
+    // JSON data
+    const programs = [
+        {
+            "programId": "P001",
+            "programName": "Weight Training",
+            "fees": "$100",
+            "duration": "4 weeks",
+            "description": "A comprehensive weight training program designed to build muscle and increase strength. Includes personalized workout plans and guidance.",
+            "image": "img1.jpg"
+        },
+        {
+            "programId": "P002",
+            "programName": "Aerobics",
+            "fees": "$80",
+            "duration": "6 weeks",
+            "description": "A high-energy aerobic exercise program to improve cardiovascular fitness and endurance. Includes group classes and expert instruction.",
+            "image": "img2.jpg"
+        },
+        {
+            "programId": "P003",
+            "programName": "Yoga",
+            "fees": "$90",
+            "duration": "8 weeks",
+            "description": "A holistic yoga program focusing on flexibility, balance, and relaxation. Includes various yoga styles and personalized instruction.",
+            "image": "img3.jpg"
+        },
+        {
+            "programId": "P004",
+            "programName": "High-Intensity Interval Training (HIIT)",
+            "fees": "$110",
+            "duration": "5 weeks",
+            "description": "An intense HIIT program designed to maximize calorie burn and improve overall fitness. Includes challenging workouts and recovery sessions.",
+            "image": "img4.jpg"
+        }
+    ];
+
+    // Function to populate the grid
+    function populateGrid() {
+        const gridContainer = document.querySelector('#programsGrid');
+        programs.forEach(program => {
+            const gridItem = document.createElement('div');
+            gridItem.className = 'grid-item';
+            
+            gridItem.innerHTML = `
+                <img src="${program.image}" alt="${program.programName}">
+                <h3>${program.programName}</h3>
+                <p><strong>Fees:</strong> ${program.fees}</p>
+                <p><strong>Duration:</strong> ${program.duration}</p>
+                <p>${program.description}</p>
+            `;
+            
+            gridContainer.appendChild(gridItem);
+        });
+    }
+
+    // Populate grid on page load
+    window.onload = populateGrid;
+</script>
+
+</body>
+</html>

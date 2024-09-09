@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Gym Program Enrollments</title>
+<style>
+body {
+    font-family: Arial, sans-serif;
+    text-align: center;
+    margin: 50px;
+}
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 20px 0;
+}
+table, th, td {
+    border: 1px solid #ddd;
+}
+th, td {
+    padding: 12px;
+    text-align: left;
+}
+th {
+    background-color: #f4f4f4;
+}
+form {
+    margin: 20px 0;
+}
+form .form-group {
+    margin-bottom: 15px;
+}
+form input, form select {
+    padding: 8px;
+    width: 100%;
+    box-sizing: border-box;
+}
+button {
+    padding: 10px 20px;
+    font-size: 16px;
+}
+</style>
+</head>
+<body>
+
+<h1 id="gymProgramTitle">Gym Program Enrollments</h1>
+
+<!-- Enrollment Form -->
+<form id="enrollmentForm">
+    <div class="form-group">
+        <label for="member">Select Member:</label>
+        <select id="member" name="member" required>
+            <!-- Options will be added by JavaScript -->
+        </select>
+    </div>
+    <div class="form-group">
+        <label for="enrollmentDate">Enrollment Date:</label>
+        <input type="date" id="enrollmentDate" name="enrollmentDate" required>
+    </div>
+    <div class="form-group">
+        <label for="numMonths">Number of Months:</label>
+        <input type="number" id="numMonths" name="numMonths" min="1" required>
+    </div>
+    <button type="submit">Save Enrollment</button>
+</form>
+
+<!-- Enrollments Table -->
+<table id="enrollmentsTable">
+    <thead>
+        <tr>
+            <th>Member</th>
+            <th>Enrollment Date</th>
+            <th>Number of Months</th>
+        </tr>
+    </thead>
+    <tbody>
+        <!-- Rows will be added by JavaScript -->
+    </tbody>
+</table>
+
+<script>
+// Get URL parameters
+const urlParams = new URLSearchParams(window.location.search);
+const gymProgramId = urlParams.get('gymprogramId');
+
+// Set the gym program title dynamically
+document.getElementById('gymProgramTitle').textContent = `Gym Program: ${gymProgramId}`;
+
+// Initialize local storage for enrollments if not already present
+if (!localStorage.getItem("enrollments")) {
+    localStorage.setItem("enrollments", JSON.stringify({}));
+}
+
+// Get elements
+const enrollmentForm = document.getElementById("enrollmentForm");
+const enrollmentsTable = document.getElementById("enrollmentsTable").getElementsByTagName('tbody')[0];
+const memberSelect = document.getElementById("member");
+
+// Load members and enrollments
+function loadMembers() {
+    // Sample member data
+    const members = ["John Doe", "Jane Smith", "Alice Johnson", "Bob Brown"];
+    members.forEach(member => {
+        const option = document.createElement('option');
+        option.value = member;
+        option.textContent = member;
+        memberSelect.appendChild(option);
+    });
+}
+
+function loadEnrollments() {
+    const enrollments = JSON.parse(localStorage.getItem("enrollments")) || {};
+    const programEnrollments = enrollments[gymProgramId] || [];
+
+    enrollmentsTable.innerHTML = ""; // Clear existing table rows
+    programEnrollments.forEach(enrollment => {
+        const row = enrollmentsTable.insertRow();
+        row.insertCell().textContent = enrollment.member;
+        row.insertCell().textContent = enrollment.enrollmentDate;
+        row.insertCell().textContent = enrollment.numMonths;
+    });
+}
+
+// Handle form submission
+enrollmentForm.addEventListener("submit", (e) => {
+    e.preventDefault();
+
+    const member = document.getElementById("member").value;
+    const enrollmentDate = document.getElementById("enrollmentDate").value;
+    const numMonths = document.getElementById("numMonths").value;
+
+    // Get current enrollments from local storage
+    const enrollments = JSON.parse(localStorage.getItem("enrollments")) || {};
+
+    // Add new enrollment to the array for the specific gym program
+    if (!enrollments[gymProgramId]) {
+        enrollments[gymProgramId] = [];
+    }
+    enrollments[gymProgramId].push({ member, enrollmentDate, numMonths });
+
+    // Save updated enrollments to local storage
+    localStorage.setItem("enrollments", JSON.stringify(enrollments));
+
+    // Clear the form
+    enrollmentForm.reset();
+
+    // Reload the enrollments table
+    loadEnrollments();
+});
+
+// Load data when the page loads
+window.onload = () => {
+    loadMembers();
+    loadEnrollments();
+};
+</script>
+
+</body>
+</html>

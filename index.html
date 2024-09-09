@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Programs Table</title>
+    <style>
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: left;
+        }
+        th {
+            background-color: #f2f2f2;
+        }
+        img {
+            max-width: 100px;
+            height: auto;
+        }
+    </style>
+</head>
+<body>
+
+<h2>Program Details</h2>
+
+<table id="programsTable">
+    <thead>
+        <tr>
+            <th>Program Name</th>
+            <th>Fees</th>
+            <th>Duration</th>
+            <th>Description</th>
+            <th>Image</th>
+        </tr>
+    </thead>
+    <tbody>
+        <!-- Data will be inserted here by JavaScript -->
+    </tbody>
+</table>
+
+<script>
+    // JSON data
+    const programs = [
+        {
+            "programId": "P001",
+            "programName": "Weight Training",
+            "fees": "$100",
+            "duration": "4 weeks",
+            "description": "A comprehensive weight training program designed to build muscle and increase strength. Includes personalized workout plans and guidance.",
+            "image": "img1.jpg"
+        },
+        {
+            "programId": "P002",
+            "programName": "Aerobics",
+            "fees": "$80",
+            "duration": "6 weeks",
+            "description": "A high-energy aerobic exercise program to improve cardiovascular fitness and endurance. Includes group classes and expert instruction.",
+            "image": "img2.jpg"
+        },
+        {
+            "programId": "P003",
+            "programName": "Yoga",
+            "fees": "$90",
+            "duration": "8 weeks",
+            "description": "A holistic yoga program focusing on flexibility, balance, and relaxation. Includes various yoga styles and personalized instruction.",
+            "image": "img3.jpg"
+        },
+        {
+            "programId": "P004",
+            "programName": "High-Intensity Interval Training (HIIT)",
+            "fees": "$110",
+            "duration": "5 weeks",
+            "description": "An intense HIIT program designed to maximize calorie burn and improve overall fitness. Includes challenging workouts and recovery sessions.",
+            "image": "img4.jpg"
+        }
+    ];
+
+    // Function to populate the table
+    function populateTable() {
+        const tableBody = document.querySelector('#programsTable tbody');
+        programs.forEach(program => {
+            const row = document.createElement('tr');
+
+            row.innerHTML = `
+                <td>${program.programName}</td>
+                <td>${program.fees}</td>
+                <td>${program.duration}</td>
+                <td>${program.description}</td>
+                <td><img src="${program.image}" alt="${program.programName}"></td>
+            `;
+            
+            tableBody.appendChild(row);
+        });
+    }
+
+    // Populate table on page load
+    window.onload = populateTable;
+</script>
+
+</body>
+</html>

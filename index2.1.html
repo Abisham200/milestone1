@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Modal Example</title>
+<style>
+/* Basic page styling */
+body {
+    font-family: Arial, sans-serif;
+    text-align: center;
+    margin-top: 50px;
+}
+/* Modal background */
+.modal {
+    display: none;
+    background-color: rgba(0, 0, 0, 0.5);
+    position: fixed;
+    z-index: 1;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+}
+/* Modal content */
+.modal-content {
+    background-color: #fff;
+    margin: 15% auto;
+    padding: 20px;
+    border: 1px solid #888;
+    width: 50%;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+}
+/* Close button */
+.close-btn {
+    color: #aaa;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+    cursor: pointer;
+}
+.close-btn:hover,
+.close-btn:focus {
+    color: #000;
+    text-decoration: none;
+}
+/* Modal title */
+.modal-title {
+    font-size: 24px;
+    margin-bottom: 15px;
+}
+/* Modal body */
+.modal-body {
+    font-size: 18px;
+}
+.form-group {
+    margin-bottom: 15px;
+}
+input[type="text"], input[type="number"] {
+    padding: 8px;
+    width: 100%;
+    box-sizing: border-box;
+}
+button {
+    padding: 10px 20px;
+    font-size: 16px;
+}
+.table-container {
+    margin-top: 20px;
+    text-align: center;
+}
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 0 auto;
+    max-width: 800px;
+}
+th, td {
+    border: 1px solid #ddd;
+    padding: 8px;
+    text-align: left;
+}
+th {
+    background-color: #f4f4f4;
+}
+</style>
+</head>
+<body>
+<h1>Member Management</h1>
+<!-- Trigger Button -->
+<button id="openModalBtn">Add Member</button>
+<!-- Modal Structure -->
+<div id="myModal" class="modal">
+    <div class="modal-content">
+        <span class="close-btn">&times;</span>
+        <h2 class="modal-title">Add Member</h2>
+        <form id="memberForm">
+            <div class="form-group">
+                <label for="name">Name:</label>
+                <input type="text" id="name" name="name" required>
+            </div>
+            <div class="form-group">
+                <label for="age">Age:</label>
+                <input type="number" id="age" name="age" required>
+            </div>
+            <div class="form-group">
+                <label for="email">Email:</label>
+                <input type="text" id="email" name="email" required>
+            </div>
+            <button type="submit">Save</button>
+        </form>
+    </div>
+</div>
+<div class="table-container">
+    <h2>Member List</h2>
+    <table id="membersTable">
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>Age</th>
+                <th>Email</th>
+            </tr>
+        </thead>
+        <tbody>
+            <!-- Member data will be inserted here -->
+        </tbody>
+    </table>
+</div>
+<script>
+// Get modal elements
+const modal = document.getElementById("myModal");
+const openModalBtn = document.getElementById("openModalBtn");
+const closeBtn = document.querySelector(".close-btn");
+const memberForm = document.getElementById("memberForm");
+const membersTable = document.getElementById("membersTable").getElementsByTagName('tbody')[0];
+
+// Open modal when the button is clicked
+openModalBtn.addEventListener("click", () => {
+    modal.style.display = "block";
+});
+
+// Close modal when the close button is clicked
+closeBtn.addEventListener("click", () => {
+    modal.style.display = "none";
+});
+
+// Close modal when clicking anywhere outside of the modal content
+window.addEventListener("click", (event) => {
+    if (event.target === modal) {
+        modal.style.display = "none";
+    }
+});
+
+// Load members from local storage and display them
+function loadMembers() {
+    const members = JSON.parse(localStorage.getItem("members")) || [];
+    membersTable.innerHTML = "";
+    members.forEach(member => {
+        const row = membersTable.insertRow();
+        row.insertCell(0).textContent = member.name;
+        row.insertCell(1).textContent = member.age;
+        row.insertCell(2).textContent = member.email;
+    });
+}
+
+// Handle form submission
+memberForm.addEventListener("submit", (e) => {
+    e.preventDefault();
+    const name = document.getElementById("name").value;
+    const age = document.getElementById("age").value;
+    const email = document.getElementById("email").value;
+
+    // Get current members from local storage
+    const members = JSON.parse(localStorage.getItem("members")) || [];
+
+    // Add new member to the array
+    members.push({ name, age, email });
+
+    // Save updated members array to local storage
+    localStorage.setItem("members", JSON.stringify(members));
+
+    // Clear the form
+    memberForm.reset();
+
+    // Close the modal
+    modal.style.display = "none";
+
+    // Reload the member list
+    loadMembers();
+});
+
+// Load members when the page loads
+window.onload = loadMembers;
+</script>
+</body>
+</html>
